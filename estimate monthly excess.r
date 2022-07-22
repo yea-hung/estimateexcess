@@ -95,7 +95,6 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
                     ymax=expected.upper),data=ee,
                 alpha=0.2,fill='#00BFC4')+
     geom_line(aes(x=date,y=expected),data=ee,color='#00BFC4')+
-    geom_line(aes(x=date,y=expected),data=TT,color='green')+
     geom_line(color='#F8766D')+
     scale_x_date(date_labels='%Y-%m',breaks=x.major,minor_breaks=x.minor)+
     scale_y_continuous(labels=scales::comma)+
