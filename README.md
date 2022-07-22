@@ -23,10 +23,10 @@ estimate_weekly_excess('dpw.Northern California')
 Estimates for the entire time period are stored in `RR`. A possible framework is thus as follows:
 
 ```r
-estimate_weekly_excess('dpw.Northern California')
-estimate_weekly_excess('dpw.Southern California')
+estimate_weekly_excess('dpw.Los Angeles County')
+estimate_weekly_excess('dpw.San Francisco Bay Area')
 estimate_weekly_excess('dpw.Inland Empire')
 saveRDS(RR,'results.rds')
 ```
 
-The function will also store time-specific results, containing estimates for excess mortality for each time unit. These will be added as `.rds` files to a folder named `time-specific results` within the working directory. Each call of the function will result in a file being added to this folder. For example, the first call above, for analysis for Northern California, will result in a file being added called `weekly Northern California.rds` containing estimates for excess mortality for each week included in the analysis.
+The function will also store time-specific results, containing estimates for excess mortality for each time unit. These will be added as `.rds` files to a folder named `time-specific results` within the working directory. Each call of the function will result in a file being added to this folder. For example, the first call above, for analysis for LA County, will result in a file being added called `weekly Los Angeles County.rds` containing estimates for excess mortality for each week included in the analysis.
