@@ -22,10 +22,10 @@ DD<-readRDS('weekly data.rds')
 MM<-readRDS('mapping for weekly data.rds)
 ```
 
-To call the function:
+To estimate excess mortality for the variable `dpw.Inland Empire` in `DD`:
 
 ```r
-estimate_weekly_excess('dpw.Northern California')
+estimate_weekly_excess('dpw.Inland Empire')
 ```
 
 Estimates for the entire time period are stored in `RR`. A possible framework is thus as follows:
