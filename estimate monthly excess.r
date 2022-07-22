@@ -31,10 +31,10 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
   )
   # define and output combined data, with observed, expected, and excess
   bb<-merge(oo,ee,by='date',all.x=FALSE,all.y=FALSE)
-  if(!file.exists('generated data')){
-    dir.create('generated data') # creates the 'generated data' directory
+  if(!file.exists('time-specific results')){
+    dir.create('time-specific results') # creates the 'generated data' directory
   }
-  ff<-paste('generated data/monthly ',gsub(stub,'',yy),'.rds',sep='')
+  ff<-paste('time-specific results/monthly ',gsub(stub,'',yy),'.rds',sep='')
   saveRDS(bb,ff)
   # obtain prediction intervals for totals
   set.seed(94158)
@@ -95,6 +95,7 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
                     ymax=expected.upper),data=ee,
                 alpha=0.2,fill='#00BFC4')+
     geom_line(aes(x=date,y=expected),data=ee,color='#00BFC4')+
+    geom_line(aes(x=date,y=expected),data=TT,color='green')+
     geom_line(color='#F8766D')+
     scale_x_date(date_labels='%Y-%m',breaks=x.major,minor_breaks=x.minor)+
     scale_y_continuous(labels=scales::comma)+

@@ -41,10 +41,10 @@ estimate_weekly_excess<-function(yy,forecast.window=91,
   )
   # define and output combined data, with observed, expected, and excess
   bb<-merge(oo,ee,by='date',all.x=FALSE,all.y=FALSE)
-  if(!file.exists('generated data')){
-    dir.create('generated data') # creates the 'generated data' directory
+  if(!file.exists('time-specific results')){
+    dir.create('time-specific results') # creates the 'generated data' directory
   }
-  ff<-paste('generated data/weekly ',gsub(stub,'',yy),'.rds',sep='')
+  ff<-paste('time-specific results/weekly ',gsub(stub,'',yy),'.rds',sep='')
   saveRDS(bb,ff)
   # obtain prediction intervals for totals
   set.seed(94158)
