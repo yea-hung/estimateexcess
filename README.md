@@ -14,6 +14,14 @@ The `mapping` object should store variable-group mappings. It should have a vari
 
 # Use
 
+
+First, load your `data` object and `mapping` object:
+
+```r
+DD<-readRDS('weekly data.rds')
+MM<-readRDS('mapping for weekly data.rds)
+```
+
 To call the function:
 
 ```r
