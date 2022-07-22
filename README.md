@@ -28,7 +28,7 @@ To estimate excess mortality for the variable `dpw.Inland Empire` in `DD`:
 estimate_weekly_excess('dpw.Inland Empire')
 ```
 
-Estimates for the entire time period are stored in `RR`. A possible framework is thus as follows:
+Estimates for the entire time period are stored in `RR`. A row is added to `RR` for each use of the function. A possible framework is thus as follows:
 
 ```r
 estimate_weekly_excess('dpw.Los Angeles County')
