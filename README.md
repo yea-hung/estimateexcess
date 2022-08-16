@@ -58,4 +58,4 @@ RR<-rbind(
 )
 ```
 
-This stacks all of the `results` from each analysis into a single data frame, `RR`.
+This stacks all of the `results` from each analysis into a single `data frame`, named `RR`.
