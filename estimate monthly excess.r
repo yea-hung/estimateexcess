@@ -26,6 +26,9 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
   )
   # define date-specific results
   DD<-merge(oo,ee,by='date',all.x=FALSE,all.y=FALSE)
+  DD$excess<-DD$observed-DD$expected
+  DD$excess.lower<-DD$observed-DD$expected.upper
+  DD$excess.upper<-DD$observed-DD$expected.lower
   # obtain prediction intervals for totals
   set.seed(94158)
   NN<-10000
