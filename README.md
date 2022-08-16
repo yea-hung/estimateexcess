@@ -2,39 +2,60 @@
 
 This code estimates excess mortality, using ARIMA models.
 
-# `data`
+# Arguments
+
+## `data`
 
 The `data` object should have a variable named `date` that is in `Date` format. If the data are aggregated by week, the expectation is that `date` is the date of the last day of the week (a Saturday, using American convention).
 
-The `data` object should also include other variables that represent the total number of deaths. These non-date variables may optionally have names that begin with a shared prefix; this prefix is known as the `stub` in the code. By default, the `stub` is `dpm.` for monthly data and `dpw.` for weekly data. 
+The `data` object should also include other variables that represent the total number of deaths. 
 
-# `mapping`
+## `stub`
 
-The `mapping` object should store variable-group mappings. It should have a variable named `variable` and a variable named `group`. The primary purposes of the `mapping` object are to (1) facilitate looping of analysis, and (2) add in a variable indicating variable in the summary data frame (see below). If that variable is not desired, you may comment out the line beginning `variable=` inside the definition of the `delta` data frame.
+The non-date variables in `data` may optionally have names that begin with a shared prefix; I call this the `stub`. The only purpose for specifying the `stub` is to remove it from the plot's title.
+
+# Values
+
+# `results.by.date`
+
+The date-specific results.
+
+# `results`
+
+The overall results, with summation over the entire time period of interest.
+
+# `plot`
+
+A visualization.
 
 # Use
 
-
-First, load your `data` object and `mapping` object:
+First, load your `data` object:
 
 ```r
 DD<-readRDS('weekly data.rds')
-MM<-readRDS('mapping for weekly data.rds)
 ```
 
 To estimate excess mortality for the variable `dpw.Inland Empire` in `DD`:
 
 ```r
-estimate_weekly_excess('dpw.Inland Empire')
+rr<-estimate_weekly_excess('dpw.Inland Empire')
 ```
 
-Estimates for the entire time period are stored in `RR`. A row is added to `RR` for each use of the function. A possible framework is thus as follows:
+To view the plot:
 
 ```r
-estimate_weekly_excess('dpw.Los Angeles County')
-estimate_weekly_excess('dpw.San Francisco Bay Area')
-estimate_weekly_excess('dpw.Inland Empire')
-saveRDS(RR,'results.rds')
+rr$plot
 ```
 
-The function will also store time-specific results, containing estimates for excess mortality for each time unit. These will be added as `.rds` files to a folder named `time-specific results` within the working directory. Each call of the function will result in a file being added to this folder. For example, the first call above will result in a file being added called `weekly Los Angeles County.rds` containing estimates for excess mortality for each week of analysis.
+A possible framework for analyzing multiple variables is as follows:
+
+```r
+RR<-rbind(
+  estimate_weekly_excess('dpw.Los Angeles County')$results
+  estimate_weekly_excess('dpw.San Francisco Bay Area')$results,
+  estimate_weekly_excess('dpw.Inland Empire')$results
+)
+```
+
+This stacks all of the `results` from each analysis into a single data frame, `RR`.

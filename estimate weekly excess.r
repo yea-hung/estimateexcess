@@ -5,12 +5,7 @@ library(ggplot2)
 # define function
 estimate_weekly_excess<-function(yy,forecast.window=91,
                                  forecast.start=as.Date('2020-03-07'),
-                                 data=DD,mapping=MM,
-                                 stub='^dpw\\.'){ 
-  # initiate results object, if it doesn't already exist
-  if(!exists('RR')){
-    RR<-NULL
-  }
+                                 data=DD,stub='^dpw\\.'){ 
   # define data
   tt<-ts(data[data$date<forecast.start,yy],freq=365.25/7,
          start=c(2016,15/7)) # the week ending 2016-01-09
@@ -39,13 +34,8 @@ estimate_weekly_excess<-function(yy,forecast.window=91,
     expected.lower=as.numeric(ff$lower[,'95%']),
     expected.upper=as.numeric(ff$upper[,'95%'])
   )
-  # define and output combined data, with observed, expected, and excess
-  bb<-merge(oo,ee,by='date',all.x=FALSE,all.y=FALSE)
-  if(!file.exists('time-specific results')){
-    dir.create('time-specific results') # creates the 'generated data' directory
-  }
-  ff<-paste('time-specific results/weekly ',gsub(stub,'',yy),'.rds',sep='')
-  saveRDS(bb,ff)
+  # define date-specific results
+  DD<-merge(oo,ee,by='date',all.x=FALSE,all.y=FALSE)
   # obtain prediction intervals for totals
   set.seed(94158)
   NN<-10000
@@ -56,22 +46,18 @@ estimate_weekly_excess<-function(yy,forecast.window=91,
     SS.i<-data.frame(pt=sum(sim.i))
     SS<-rbind(SS,SS.i)
   }
-  # store results
-  delta<-data.frame(
-    # define variable and group
-    variable=mapping$variable[mapping$group==gsub(stub,'',yy)],
+  # define overall results
+  RR<-data.frame(
     group=yy,
-    # define results for entire period
-    observed=sum(bb$observed),
-    expected=sum(bb$expected),
+    observed=sum(DD$observed),
+    expected=sum(DD$expected),
     expected.lower=as.numeric(quantile(SS$pt,c(0.025))),
     expected.upper=as.numeric(quantile(SS$pt,c(0.975))),
-    excess=sum(bb$observed-bb$expected),
-    excess.alternate=sum(bb$observed)-mean(SS$pt),
-    excess.lower=sum(bb$observed)-as.numeric(quantile(SS$pt,0.975)),
-    excess.upper=sum(bb$observed)-as.numeric(quantile(SS$pt,0.025))
+    excess=sum(DD$observed-DD$expected),
+    excess.alternate=sum(DD$observed)-mean(SS$pt),
+    excess.lower=sum(DD$observed)-as.numeric(quantile(SS$pt,0.975)),
+    excess.upper=sum(DD$observed)-as.numeric(quantile(SS$pt,0.025))
   )
-  RR<<-rbind(RR,delta)
   # define prior deaths
   pp<-data
   pp$date<-as.Date(pp$date,'%Y-%m-%d')
@@ -89,9 +75,9 @@ estimate_weekly_excess<-function(yy,forecast.window=91,
   # define title for plot
   tt<-gsub(stub,'',yy)
   tt<-paste(tt,':',sep='')
-  excess.point<-delta$excess
+  excess.point<-RR$excess
   excess.point<-format(round(excess.point,0),trim=TRUE,big.mark=',')
-  excess.interval<-c(delta$excess.lower,delta$excess.upper)
+  excess.interval<-c(RR$excess.lower,RR$excess.upper)
   excess.interval<-format(round(excess.interval,0),trim=TRUE,big.mark=',')
   excess.interval<-paste(excess.interval,collapse=' to ')
   excess.interval<-paste('(',excess.interval,')',sep='')
@@ -100,7 +86,7 @@ estimate_weekly_excess<-function(yy,forecast.window=91,
   x.major<-rr[seq(1,length(rr),12)]
   x.minor<-rr
   # define plot
-  gg<-ggplot(aes(x=date,y=observed),data=oo)+
+  PP<-ggplot(aes(x=date,y=observed),data=oo)+
     geom_line(aes(x=date,y=prior,group=year),data=pp,color='gray85')+
     geom_ribbon(aes(x=date,y=expected,ymin=expected.lower,
                     ymax=expected.upper),data=ee,
@@ -111,6 +97,6 @@ estimate_weekly_excess<-function(yy,forecast.window=91,
     scale_y_continuous(labels=scales::comma)+
     labs(x='',y='Deaths per week',title=tt)+
     theme_bw()
-  # show plot
-  print(gg)
+  # return results
+  list(results.by.date=DD,results=RR,plot=PP)
 }
