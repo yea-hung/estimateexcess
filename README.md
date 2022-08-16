@@ -29,7 +29,9 @@ First, load your `data` object:
 DD<-readRDS('weekly data.rds')
 ```
 
-To estimate excess mortality for the variable `dpw.Inland Empire` in `DD`:
+We have named the object `DD` since this is the default value of `data` in the estimation functions.
+
+To estimate excess mortality for the variable `dpw.Inland Empire`:
 
 ```r
 rr<-estimate_weekly_excess('dpw.Inland Empire')
