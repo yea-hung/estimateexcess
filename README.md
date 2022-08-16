@@ -6,13 +6,13 @@ This code estimates excess mortality, using ARIMA models.
 
 ## `data`
 
-The `data` object should have a variable named `date` that is in `Date` format. If the data are aggregated by week, the expectation is that `date` is the date of the last day of the week (a Saturday, using American convention).
+The `data` object should be a `data frame`, with a variable named `date` that is in `Date` format. If the data are aggregated by week, the expectation is that `date` is the date of the last day of the week (a Saturday, using American convention).
 
-The `data` object should also include other variables that represent the total number of deaths. 
+The other variables in `data` should each represent the total number of deaths within some group of interest. These might optionally share a common name prefix, referred to as a `stub` in the code (see below). For example, the variables might be named: `dpw.California`, `dpw.Oregon`, and `dpw.Washington`.
 
 ## `stub`
 
-The non-date variables in `data` may optionally have names that begin with a shared prefix; I call this the `stub`. The only purpose for specifying the `stub` is to remove it from the plot's title.
+This argument is optional. The only purpose for specifying the `stub` is to remove it from the plot's title.
 
 # Values
 
