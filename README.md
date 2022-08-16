@@ -14,7 +14,7 @@ The other variables in `data` should each represent the total number of deaths w
 
 This argument is optional. The only purpose for specifying the `stub` is to remove it from the plot's title.
 
-# Values
+# Value
 
 # `results.by.date`
 
