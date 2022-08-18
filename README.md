@@ -17,7 +17,7 @@ R code for estimating excess mortality, using ARIMA models.
 - `yy`: The name of the variable of interest, in `data`.
 - `forecast.window`: The length of the forecast window. This is the total length of the time period of interest. In other words, if performing analysis for pandemic-related excess mortality, the `forecast.window` is the duration of pandemic time of interest.
 - `forecast.start`: The start date of the forecast.
-- `data.start`: The start date of the data, in a vector form. See documentation for `ts()` for further information.
+- `data.start`: The start date of the data, in a vector form. Consult the default value and the documentation for `ts()` for further information.
 - `data`: The `data` object should be a `data.frame`, with a variable named `date` that is in `Date` format. If the data are aggregated by week, the expectation is that `date` is the date of the last day of the week (a Saturday, using American convention). The other variables in `data` should each represent the total number of deaths within some group of interest. These might optionally share a common name prefix, referred to as a `stub` in the code (see below). For example, the variables might be named: `dpw.California`, `dpw.Oregon`, and `dpw.Washington`.
 - `stub`: This argument is optional. Specifying the `stub` will remove it from the plot's title.
 
