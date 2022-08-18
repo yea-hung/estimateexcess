@@ -2,6 +2,11 @@
 
 R code for estimating excess mortality, using ARIMA models. 
 
+# Dependencies
+
+- *forecast*: Used for the ARIMA models.
+- *ggplot2*: Used to plot the results.
+
 # Functions
 
 - `estimate_weekly_excess()`: Function for estimating weekly excess.
