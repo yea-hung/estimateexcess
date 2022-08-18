@@ -64,7 +64,6 @@ estimate_weekly_excess<-function(yy,forecast.window=91,
   )
   # define prior deaths
   pp<-data
-  pp$date<-as.Date(pp$date,'%Y-%m-%d')
   pp<-lapply(2016:2019,function(year){
     prior.start<-as.Date(paste(year,'03-07',sep='-'),'%Y-%m-%d')
     prior<-subset(pp,date>=prior.start)

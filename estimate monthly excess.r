@@ -12,7 +12,7 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
   # fit model 
   mm<-auto.arima(tt)
   # obtain forecasts
-  ff<-forecast(mm,h=forecast.window)
+  ff<-forecast(mm,h=forecast.window,biasadj = TRUE)
   # extract observed values
   rr<-data$date[(data$date>=forecast.start)]
   rr<-rr[1:forecast.window]
@@ -53,7 +53,6 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
   )
   # define prior deaths
   pp<-data
-  pp$date<-as.Date(pp$date,'%Y-%m-%d')
   pp<-lapply(2016:2019,function(year){
     prior.start<-as.Date(paste(year,'03-01',sep='-'),'%Y-%m-%d')
     prior<-subset(pp,date>=prior.start)
@@ -61,7 +60,7 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
     prior<-subset(prior,date<as.Date('2020-03-01','%Y-%m-%d'))
     names(prior)[2]<-'prior'
     prior$year<-year
-    prior$date<-prior$date+(2020-year)*365.25
+    prior$date<-as.Date(paste('2020',substr(prior$date,6,10),sep='-'),'%Y-%m-%d')
     prior
   })
   pp<-do.call(rbind,pp)
