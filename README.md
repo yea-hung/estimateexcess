@@ -20,6 +20,7 @@ R code for estimating excess mortality, using ARIMA models.
 
 - `results.by.date`: The date-specific results.
 - `results`: The overall results, with summation over the entire time period of interest.
+- `simulations`: Simulated sums. These can be used to obtain a prediction interval for the sum over the time period of interest.
 - `plot`: A visualization of the results. The gray lines indicate prior years. The blue line indicates expectation. The red line indicates observed.
 
 # Use
