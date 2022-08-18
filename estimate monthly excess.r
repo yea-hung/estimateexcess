@@ -61,10 +61,15 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
     prior<-subset(prior,date<as.Date('2020-03-01','%Y-%m-%d'))
     names(prior)[2]<-'prior'
     prior$year<-year
-    prior$date<-as.Date(paste('2020',substr(prior$date,6,10),sep='-'),'%Y-%m-%d')
+    prior$date.original<-prior$date
+    prior$actual.year<-as.numeric(substr(prior$date,1,4))
+    prior$fake.year<-2020+(prior$actual.year-min(prior$actual.year))
+    prior$date<-paste(prior$fake.year,substr(prior$date,6,10),sep='-')
+    prior$date<-as.Date(prior$date,'%Y-%m-%d')
     prior
   })
   pp<-do.call(rbind,pp)
+  row.names(pp)<-NULL
   # define title for plot
   tt<-gsub(stub,'',yy)
   tt<-paste(tt,':',sep='')
