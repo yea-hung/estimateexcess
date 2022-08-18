@@ -7,6 +7,8 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
                                   forecast.start=as.Date('2020-03-01'),
                                   data.start=c(2016,1),
                                   data=DD,stub='^dpm\\.'){ 
+  # sort data
+  data<-data[order(data$date),]
   # define data
   tt<-ts(data[data$date<forecast.start,yy],freq=12,start=data.start) 
   # fit model 

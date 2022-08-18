@@ -7,6 +7,8 @@ estimate_weekly_excess<-function(yy,forecast.window=91,
                                  forecast.start=as.Date('2020-03-07'),
                                  data.start=c(2016,15/7), # the week ending 2016-01-09
                                  data=DD,stub='^dpw\\.'){ 
+  # sort data
+  data<-data[order(data$date),]
   # define data
   tt<-ts(data[data$date<forecast.start,yy],freq=365.25/7,
          start=data.start) 
