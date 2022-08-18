@@ -59,7 +59,7 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
     prior<-subset(pp,date>=prior.start)
     prior<-prior[1:forecast.window,c('date',yy)]
     prior<-subset(prior,date<as.Date('2020-03-01','%Y-%m-%d'))
-    names(prior)[2]<-'prior'
+    names(prior)[names(prior)==yy]<-'prior'
     prior$year<-year
     prior$date.original<-prior$date
     prior$actual.year<-as.numeric(substr(prior$date,1,4))
