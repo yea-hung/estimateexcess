@@ -103,5 +103,5 @@ estimate_weekly_excess<-function(yy,forecast.window=91,
     labs(x='',y='Deaths per week',title=tt)+
     theme_bw()
   # return results
-  list(results.by.date=DD,results=RR,plot=PP)
+  list(results.by.date=DD,results=RR,simulations=SS,plot=PP)
 }
