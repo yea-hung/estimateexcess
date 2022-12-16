@@ -1,6 +1,6 @@
 # Description
 
-R code for estimating excess mortality, using ARIMA models. 
+R functions for estimating excess mortality, using ARIMA models. 
 
 # Dependencies
 
