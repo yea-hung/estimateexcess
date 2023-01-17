@@ -53,11 +53,10 @@ rr$plot
 A possible framework for analyzing multiple variables is as follows:
 
 ```r
-RR<-rbind(
-  estimate_weekly_excess('dpw.Los Angeles County')$results
-  estimate_weekly_excess('dpw.San Francisco Bay Area')$results,
-  estimate_weekly_excess('dpw.Inland Empire')$results
-)
+r1<-estimate_weekly_excess('dpw.Los Angeles County')
+r2<-estimate_weekly_excess('dpw.San Francisco Bay Area')
+r3<-estimate_weekly_excess('dpw.Inland Empire')
+RR<-rbind(r1$results,r2$results,r3$results)
 ```
 
 This stacks all of the `results` from each analysis into a single `data.frame`, named `RR`.
