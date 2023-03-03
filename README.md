@@ -33,10 +33,10 @@ R functions for estimating excess mortality, using ARIMA models.
 First, load your `data` object:
 
 ```r
-DD<-readRDS('weekly data.rds')
+dd<-readRDS('weekly data.rds')
 ```
 
-We have named the object `DD` since this is the default value of `data` in the estimation functions.
+We have named the object `dd` since this is the default value of `data` in the estimation functions.
 
 To estimate excess mortality for the variable `dpw.Inland Empire`:
 
