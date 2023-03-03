@@ -6,7 +6,7 @@ library(ggplot2)
 estimate_monthly_excess<-function(yy,forecast.window=14,
                                   forecast.start=as.Date('2020-03-01'),
                                   data.start=c(2016,1),
-                                  data=DD,stub='^dpm\\.'){ 
+                                  data=dd,stub='^dpm\\.'){ 
   # sort data
   data<-data[order(data$date),]
   # define data
