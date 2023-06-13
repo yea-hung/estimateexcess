@@ -10,7 +10,7 @@ estimate_weekly_excess<-function(yy,forecast.window=143,
   # sort data
   data<-data[order(data$week),]
   # define data
-  tt<-ts(data[data$week<forecast.start,yy],freq=365.25/7,
+  tt<-ts(data[data$week<forecast.start,yy],frequency=365.25/7,
          start=data.start) 
   # fit model 
   # - https://otexts.com/fpp2/complexseasonality.html
