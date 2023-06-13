@@ -10,11 +10,11 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
   # sort data
   data<-data[order(data$month),]
   # define data
-  tt<-ts(data[data$month<forecast.start,yy],freq=12,start=data.start) 
+  tt<-ts(data[data$month<forecast.start,yy],frequency=12,start=data.start) 
   # fit model 
   mm<-auto.arima(tt)
   # obtain forecasts
-  ff<-forecast(mm,h=forecast.window,biasadj = TRUE)
+  ff<-forecast(mm,h=forecast.window)
   # extract observed values
   rr<-data$month[(data$month>=forecast.start)]
   rr<-rr[1:forecast.window]
