@@ -12,7 +12,7 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
   # define data
   tt<-ts(data[data$month<forecast.start,yy],frequency=12,start=data.start) 
   # fit model 
-  mm<-auto.arima(tt)
+  mm<-auto.arima(tt,D=1)
   # obtain forecasts
   ff<-forecast(mm,h=forecast.window)
   # extract observed values
