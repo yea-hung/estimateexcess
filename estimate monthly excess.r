@@ -6,7 +6,7 @@ library(ggplot2)
 estimate_monthly_excess<-function(yy,forecast.window=14,
                                   forecast.start=as.Date('2020-03-01'),
                                   data.start=c(2016,1),
-                                  data=dd,stub='^dpm\\.'){ 
+                                  data=dd){ 
   # sort data
   data<-data[order(data$month),]
   # define data
@@ -54,49 +54,31 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
     excess.lower=sum(MM$observed)-as.numeric(quantile(SS$pt,0.975)),
     excess.upper=sum(MM$observed)-as.numeric(quantile(SS$pt,0.025))
   )
-  # define prior deaths
-  pp<-data
-  earliest.year<-min(as.numeric(substr(pp$month,1,4)))
-  pp<-lapply(earliest.year:2019,function(year){
-    prior.start<-as.Date(paste(year,'03-01',sep='-'),'%Y-%m-%d')
-    prior<-subset(pp,month>=prior.start)
-    prior<-prior[1:forecast.window,c('month',yy)]
-    prior<-subset(prior,month<as.Date('2020-03-01','%Y-%m-%d'))
-    names(prior)[names(prior)==yy]<-'prior'
-    prior$year<-year
-    prior$month.original<-prior$month
-    prior$actual.year<-as.numeric(substr(prior$month,1,4))
-    prior$fake.year<-2020+(prior$actual.year-min(prior$actual.year))
-    prior$month<-paste(prior$fake.year,substr(prior$month,6,10),sep='-')
-    prior$month<-as.Date(prior$month,'%Y-%m-%d')
-    prior
-  })
-  pp<-do.call(rbind,pp)
-  row.names(pp)<-NULL
-  # define title for plot
-  tt<-gsub(stub,'',yy)
-  tt<-paste(tt,':',sep='')
-  excess.point<-RR$excess
-  excess.point<-format(round(excess.point,0),trim=TRUE,big.mark=',')
-  excess.interval<-c(RR$excess.lower,RR$excess.upper)
-  excess.interval<-format(round(excess.interval,0),trim=TRUE,big.mark=',')
-  excess.interval<-paste(excess.interval,collapse=' to ')
-  excess.interval<-paste('(',excess.interval,')',sep='')
-  tt<-paste(tt,excess.point,excess.interval,'excess deaths')
   # define x-axis breaks 
-  x.major<-rr[seq(1,length(rr),3)]
-  x.minor<-rr
+  x.minor<-unique(substr(data$month,1,7))
+  x.minor<-paste(x.minor,'01',sep='-')
+  x.minor<-as.Date(x.minor,'%Y-%m-%d')
+  x.major<-x.minor[seq(1,length(x.minor),12)]
+  # define data for plot
+  pandemic<-MM[,c('month','observed','expected',
+                  'expected.lower','expected.upper')]
+  prior<-data[data$month<forecast.start,c('month',yy)]
+  names(prior)[2]<-'observed'
+  prior$expected<-as.numeric(ff$fitted)
+  prior$expected.lower<-NA
+  prior$expected.upper<-NA
+  plot.data<-rbind(prior,pandemic)
   # define plot
-  PP<-ggplot(aes(x=month,y=observed),data=oo)+
-    geom_line(aes(x=month,y=prior,group=year),data=pp,color='gray85')+
+  PP<-ggplot(aes(x=month,y=observed),data=plot.data)+
     geom_ribbon(aes(x=month,y=expected,ymin=expected.lower,
-                    ymax=expected.upper),data=ee,
+                    ymax=expected.upper),
+                data=subset(plot.data,month>=forecast.start),
                 alpha=0.2,fill='#00BFC4')+
-    geom_line(aes(x=month,y=expected),data=ee,color='#00BFC4')+
-    geom_line(color='#F8766D')+
+    geom_line(aes(x=month,y=observed),color='#F8766D')+
+    geom_line(aes(x=month,y=expected),color='#00BFC4')+   
     scale_x_date(date_labels='%Y-%m',breaks=x.major,minor_breaks=x.minor)+
     scale_y_continuous(labels=scales::comma)+
-    labs(x='',y='Deaths per month',title=tt)+
+    labs(x='',y='Deaths per month')+
     theme_bw()
   # return results
   list(results.by.month=MM,results=RR,simulations=SS,plot=PP)
