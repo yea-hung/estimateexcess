@@ -73,7 +73,7 @@ estimate_weekly_excess<-function(yy,forecast.window=143,
   # define data for plot
   pandemic<-WW[,c('week','observed','expected',
                   'expected.lower','expected.upper')]
-  prior<-data[data$week<forecast.start,]
+  prior<-data[data$week<forecast.start,c('week',yy)]
   names(prior)[2]<-'observed'
   prior$expected<-as.numeric(ff$fitted)
   prior$expected.lower<-NA
