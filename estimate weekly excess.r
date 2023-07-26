@@ -5,6 +5,7 @@ library(ggplot2)
 # define function
 estimate_weekly_excess<-function(yy,forecast.window=143,
                                  forecast.start=as.Date('2020-03-07'),
+                                 forecast.periods=NULL,
                                  data.start=c(2016,15/7), # the week ending 2016-01-09
                                  data=dd){ 
   # sort data
@@ -50,6 +51,11 @@ estimate_weekly_excess<-function(yy,forecast.window=143,
     sim.i<-simulate(mm,future=TRUE,nsim=forecast.window,
                     xreg=fourier(tt,K=k.best,h=forecast.window))
     SS.i<-data.frame(pt=sum(sim.i))
+    if(!is.null(forecast.periods)){
+      for(pp in unique(forecast.periods)){
+        SS.i[,paste('p',pp,sep='')]<-sum(sim.i[which(forecast.periods==pp)])
+      }
+    }
     SS<-rbind(SS,SS.i)
   }
   # define overall results
@@ -65,6 +71,25 @@ estimate_weekly_excess<-function(yy,forecast.window=143,
     excess.lower=sum(WW$observed)-as.numeric(quantile(SS$pt,0.975)),
     excess.upper=sum(WW$observed)-as.numeric(quantile(SS$pt,0.025))
   )
+  if(!is.null(forecast.periods)){
+    for(period in unique(forecast.periods)){
+      WW.i<-which(forecast.periods==period) 
+      SS.i<-paste('p',period,sep='') 
+      ss<-period 
+      RR[,paste('observed',ss,sep='.')]<-sum(WW$observed[WW.i])
+      RR[,paste('expected',ss,sep='.')]<-sum(WW$expected[WW.i])
+      RR[,paste('expected.alternate',ss,sep='.')]<-mean(SS[,SS.i])
+      RR[,paste('expected.lower',ss,sep='.')]<-quantile(SS[,SS.i],c(0.025))
+      RR[,paste('expected.upper',ss,sep='.')]<-quantile(SS[,SS.i],c(0.975))
+      RR[,paste('excess',ss,sep='.')]<-sum(WW$observed[WW.i]-WW$expected[WW.i])
+      RR[,paste('excess.alternate',ss,sep='.')]<-sum(WW$observed[WW.i])-
+        mean(SS[,SS.i])
+      RR[,paste('excess.lower',ss,sep='.')]<-sum(WW$observed[WW.i])-
+        quantile(SS[,SS.i],0.975)
+      RR[,paste('excess.upper',ss,sep='.')]<-sum(WW$observed[WW.i])-
+        quantile(SS[,SS.i],0.025)
+    }
+  }
   # define x-axis breaks 
   x.minor<-unique(substr(data$week,1,7))
   x.minor<-paste(x.minor,'01',sep='-')
