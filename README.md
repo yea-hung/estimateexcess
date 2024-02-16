@@ -60,3 +60,7 @@ RR<-rbind(r1$results,r2$results,r3$results)
 ```
 
 This stacks all of the `results` from each analysis into a single `data.frame`, named `RR`.
+
+# Models
+
+The weekly models use an approach described [here](https://otexts.com/fpp2/complexseasonality.html) and [here](https://robjhyndman.com/hyndsight/forecasting-weekly-data/).
