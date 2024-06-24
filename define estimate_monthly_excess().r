@@ -8,19 +8,36 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
                                   forecast.periods=NULL,
                                   data.start=c(2016,1),
                                   data=dd){ 
+  
   # sort data
   data<-data[order(data$month),]
+  
   # define data
-  tt<-ts(data[data$month<forecast.start,yy],frequency=12,start=data.start) 
+  tt<-ts(data[data$month<forecast.start,yy],frequency=12,start=data.start)
+  
   # fit model 
-  mm<-auto.arima(tt)
+  # mm<-auto.arima(tt)
+  
+  # fit model 
+  mm<-list(aicc=Inf)
+  for(i in 1:6){ # should not exceed 12/2
+    mm.i<-auto.arima(tt,xreg=fourier(tt,K=i),seasonal=TRUE)
+    if(mm.i$aicc<mm$aicc){
+      mm<-mm.i
+      k.best<-i
+    }
+  }
+  
   # obtain forecasts
-  ff<-forecast(mm,h=forecast.window)
+  # ff<-forecast(mm,h=forecast.window)
+  ff<-forecast(mm,xreg=fourier(tt,K=k.best,h=forecast.window))
+  
   # extract observed values
   rr<-data$month[(data$month>=forecast.start)]
   rr<-rr[1:forecast.window]
   oo<-data[is.element(data$month,rr),c('month',yy)]
   names(oo)[2]<-'observed'
+  
   # extract expected values
   ee<-data.frame(
     month=rr,
@@ -28,17 +45,21 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
     expected.lower=as.numeric(ff$lower[,'95%']),
     expected.upper=as.numeric(ff$upper[,'95%'])
   )
+  
   # define month-specific results
   MM<-merge(oo,ee,by='month',all.x=FALSE,all.y=FALSE)
   MM$excess<-MM$observed-MM$expected
   MM$excess.lower<-MM$observed-MM$expected.upper
   MM$excess.upper<-MM$observed-MM$expected.lower
+  
   # obtain prediction intervals for totals
   set.seed(94158)
   NN<-10000
   SS<-NULL
   for(ii in 1:NN){
-    sim.i<-simulate(mm,future=TRUE,nsim=forecast.window)
+    # sim.i<-simulate(mm,future=TRUE,nsim=forecast.window)
+    sim.i<-simulate(mm,future=TRUE,nsim=forecast.window,
+                    xreg=fourier(tt,K=k.best,h=forecast.window))
     SS.i<-data.frame(pt=sum(sim.i))
     if(!is.null(forecast.periods)){
       for(pp in unique(forecast.periods)){
@@ -47,14 +68,15 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
     }
     SS<-rbind(SS,SS.i)
   }
+  
   # store results
   RR<-data.frame(
     group=yy,
     observed=sum(MM$observed),
     expected=sum(MM$expected),
     expected.alternate=mean(SS$pt),
-    expected.lower=as.numeric(quantile(SS$pt,c(0.025))),
-    expected.upper=as.numeric(quantile(SS$pt,c(0.975))),
+    expected.lower=as.numeric(quantile(SS$pt,0.025)),
+    expected.upper=as.numeric(quantile(SS$pt,0.975)),
     excess=sum(MM$observed-MM$expected),
     excess.alternate=sum(MM$observed)-mean(SS$pt),
     excess.lower=sum(MM$observed)-as.numeric(quantile(SS$pt,0.975)),
@@ -68,8 +90,8 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
       RR[,paste('observed',ss,sep='.')]<-sum(MM$observed[MM.i])
       RR[,paste('expected',ss,sep='.')]<-sum(MM$expected[MM.i])
       RR[,paste('expected.alternate',ss,sep='.')]<-mean(SS[,SS.i])
-      RR[,paste('expected.lower',ss,sep='.')]<-quantile(SS[,SS.i],c(0.025))
-      RR[,paste('expected.upper',ss,sep='.')]<-quantile(SS[,SS.i],c(0.975))
+      RR[,paste('expected.lower',ss,sep='.')]<-quantile(SS[,SS.i],0.025)
+      RR[,paste('expected.upper',ss,sep='.')]<-quantile(SS[,SS.i],0.975)
       RR[,paste('excess',ss,sep='.')]<-sum(MM$observed[MM.i]-MM$expected[MM.i])
       RR[,paste('excess.alternate',ss,sep='.')]<-sum(MM$observed[MM.i])-
         mean(SS[,SS.i])
@@ -79,11 +101,13 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
         quantile(SS[,SS.i],0.025)
     }
   }
+  
   # define x-axis breaks 
   x.minor<-unique(substr(data$month,1,7))
   x.minor<-paste(x.minor,'01',sep='-')
   x.minor<-as.Date(x.minor,'%Y-%m-%d')
   x.major<-x.minor[seq(1,length(x.minor),12)]
+  
   # define data for plot
   pandemic<-MM[,c('month','observed','expected',
                   'expected.lower','expected.upper')]
@@ -93,6 +117,7 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
   prior$expected.lower<-NA
   prior$expected.upper<-NA
   plot.data<-rbind(prior,pandemic)
+  
   # define plot
   PP<-ggplot(aes(x=month,y=observed),data=plot.data)+
     geom_ribbon(aes(x=month,y=expected,ymin=expected.lower,
@@ -105,6 +130,9 @@ estimate_monthly_excess<-function(yy,forecast.window=14,
     scale_y_continuous(labels=scales::comma)+
     labs(x='',y='Deaths per month')+
     theme_bw()
+  
   # return results
-  list(results.by.month=MM,results=RR,simulations=SS,plot=PP)
+  list(results.by.month=MM,results=RR,simulations=SS,plot=PP,
+       plot.data=plot.data)
+  
 }
