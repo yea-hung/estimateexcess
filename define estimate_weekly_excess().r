@@ -83,18 +83,18 @@ estimate_weekly_excess<-function(yy,forecast_window=143,
       WW.i<-which(forecast_periods==period) 
       SS.i<-paste('p',period,sep='') 
       ss<-period 
-      RR[,paste('observed',ss,sep='.')]<-sum(WW$observed[WW.i])
-      RR[,paste('expected',ss,sep='.')]<-mean(SS[,SS.i])
-      RR[,paste('expected_alternate',ss,sep='.')]<-sum(WW$expected[WW.i])
-      RR[,paste('expected_lower',ss,sep='.')]<-quantile(SS[,SS.i],c(0.025))
-      RR[,paste('expected_upper',ss,sep='.')]<-quantile(SS[,SS.i],c(0.975))
-      RR[,paste('excess',ss,sep='.')]<-sum(WW$observed[WW.i])-mean(SS[,SS.i])
-      RR[,paste('excess_alternate',ss,sep='.')]<-sum(
+      RR[,paste('observed',ss,sep='_')]<-sum(WW$observed[WW.i])
+      RR[,paste('expected',ss,sep='_')]<-mean(SS[,SS.i])
+      RR[,paste('expected_alternate',ss,sep='_')]<-sum(WW$expected[WW.i])
+      RR[,paste('expected_lower',ss,sep='_')]<-quantile(SS[,SS.i],c(0.025))
+      RR[,paste('expected_upper',ss,sep='_')]<-quantile(SS[,SS.i],c(0.975))
+      RR[,paste('excess',ss,sep='_')]<-sum(WW$observed[WW.i])-mean(SS[,SS.i])
+      RR[,paste('excess_alternate',ss,sep='_')]<-sum(
         WW$observed[WW.i]-WW$expected[WW.i]
       )
-      RR[,paste('excess_lower',ss,sep='.')]<-sum(WW$observed[WW.i])-
+      RR[,paste('excess_lower',ss,sep='_')]<-sum(WW$observed[WW.i])-
         quantile(SS[,SS.i],0.975)
-      RR[,paste('excess_upper',ss,sep='.')]<-sum(WW$observed[WW.i])-
+      RR[,paste('excess_upper',ss,sep='_')]<-sum(WW$observed[WW.i])-
         quantile(SS[,SS.i],0.025)
     }
   }
