@@ -16,18 +16,8 @@ estimate_monthly_excess<-function(yy,forecast_window=14,
   tt<-ts(data[data$month<forecast_start,yy],frequency=12,start=data_start)
   
   # fit model 
-  # mm<-auto.arima(tt)
-  
-  # fit model 
-  mm<-list(aicc=Inf)
-  for(i in 1:6){ # should not exceed 12/2
-    mm.i<-auto.arima(tt,xreg=fourier(tt,K=i),seasonal=TRUE)
-    if(mm.i$aicc<mm$aicc){
-      mm<-mm.i
-      k.best<-i
-    }
-  }
-  
+  mm<-auto.arima(tt)
+
   # obtain forecasts
   ff<-forecast(mm,h=forecast_window)
   
