@@ -104,13 +104,13 @@ estimate_monthly_excess<-function(yy,forecast_window=14,
   prior$expected<-as.numeric(ff$fitted)
   prior$expected_lower<-NA
   prior$expected_upper<-NA
-  plot.data<-rbind(prior,pandemic)
+  plot_data<-rbind(prior,pandemic)
   
   # define plot
-  PP<-ggplot(aes(x=month,y=observed),data=plot.data)+
+  PP<-ggplot(aes(x=month,y=observed),data=plot_data)+
     geom_ribbon(aes(x=month,y=expected,ymin=expected_lower,
                     ymax=expected_upper),
-                data=subset(plot.data,month>=forecast_start),
+                data=subset(plot_data,month>=forecast_start),
                 alpha=0.2,fill='#00BFC4')+
     geom_line(aes(x=month,y=observed),color='#F8766D')+
     geom_line(aes(x=month,y=expected),color='#00BFC4')+   
@@ -120,7 +120,7 @@ estimate_monthly_excess<-function(yy,forecast_window=14,
     theme_bw()
   
   # return results
-  list(results.by.month=MM,results=RR,simulations=SS,plot=PP,
-       plot.data=plot.data)
+  list(results_by_month=MM,results=RR,simulations=SS,plot=PP,
+       plot_data=plot_data)
   
 }
