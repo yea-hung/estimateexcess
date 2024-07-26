@@ -15,15 +15,15 @@ R functions for estimating excess mortality, using ARIMA models.
 # Arguments
 
 - `yy`: The name of the variable of interest, in `data`.
-- `forecast.window`: The length of the forecast window. This is the total length of the time period of interest. In other words, if performing analysis for pandemic-related excess mortality, the `forecast.window` is the duration of pandemic time of interest.
-- `forecast.start`: The start date of the forecast.
-- `forecast.periods`: Optional. A vector that has unique values for each time period of interest. The length of the vector should be equal to `forecast.window`.
-- `data.start`: The start date of the data, in a vector form. Consult the default value and the documentation for `ts()` for further information.
+- `forecast_window`: The length of the forecast window. This is the total length of the time period of interest. In other words, if performing analysis for pandemic-related excess mortality, the `forecast_window` is the duration of pandemic time of interest.
+- `forecast_start`: The start date of the forecast_
+- `forecast_periods`: Optional. A vector that has unique values for each time period of interest. The length of the vector should be equal to `forecast_window`.
+- `data_start`: The start date of the data, in a vector form. Consult the default value and the documentation for `ts()` for further information.
 - `data`: The `data` object should be a `data.frame`, with a `Date` variable named `month` (if using monthly data) or `week` (if using weekly data). In the latter scenario, the expectation is that `week` is the date of the last day of the week (a Saturday, using US convention). The other variables in `data` should each represent the total number of deaths within some group of interest. 
 
 # Value
 
-- `results.by.month` or `results.by.week`: The date-specific results.
+- `results_by_month` or `results_by_week`: The date-specific results.
 - `results`: The overall results, with summation over the entire time period of interest.
 - `simulations`: Simulated sums. These can be used to obtain a prediction interval for the sum over the time period of interest. The bounds in `results` (above) are derived from these simulations. However, the entirety of the simulations may be useful in some cases.
 - `plot`: A visualization of the results. 
