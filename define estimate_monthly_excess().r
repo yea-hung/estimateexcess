@@ -2,7 +2,7 @@
 library(forecast)
 library(ggplot2)
 
-# define function
+# define function 
 estimate_monthly_excess<-function(yy,forecast_window=14,
                                   forecast_start=as.Date('2020-03-01'),
                                   forecast_periods=NULL,
