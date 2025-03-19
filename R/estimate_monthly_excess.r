@@ -133,8 +133,8 @@ estimate_monthly_excess<-function(outcome_variable,
       data=subset(PP_DD,month>=forecast_start),
       alpha=0.2,fill='#00BFC4'
     )+
-    ggplot2::geom_line(aes(x=month,y=observed),color='#F8766D')+
-    ggplot2::geom_line(aes(x=month,y=expected),color='#00BFC4')+
+    ggplot2::geom_line(ggplot2::aes(x=month,y=observed),color='#F8766D')+
+    ggplot2::geom_line(ggplot2::aes(x=month,y=expected),color='#00BFC4')+
     ggplot2::scale_x_date(date_labels='%Y-%m',
                           breaks=x_major,minor_breaks=x_minor)+
     ggplot2::scale_y_continuous(labels=scales::comma)+
