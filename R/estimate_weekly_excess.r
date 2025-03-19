@@ -38,7 +38,7 @@ estimate_weekly_excess<-function(
   # fit model
   mm<-list(aicc=Inf)
   for(i in 1:26){ # should not exceed 52/2
-    mm_i<-forecast::auto.arima(tt,xreg=fourier(tt,K=i),seasonal=TRUE)
+    mm_i<-forecast::auto.arima(tt,xreg=fourier(tt,K=i))
     if(mm_i$aicc<mm$aicc){
       mm<-mm_i
       k_best<-i
