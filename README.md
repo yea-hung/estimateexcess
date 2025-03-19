@@ -13,7 +13,7 @@ install.packages('devtools')
 Install the *EstimateExcessMortality* package:
 
 ```r
-devtools::install_github('yea-hung/EstimateExcessMortality')
+devtools::install_github('yea-hung/estimateexcess')
 ```
 
 # Use
@@ -21,7 +21,7 @@ devtools::install_github('yea-hung/EstimateExcessMortality')
 Load the package:
 
 ```r
-library('EstimateExcessMortality')
+library('estimateexcess')
 ```
 
 Import your data:
