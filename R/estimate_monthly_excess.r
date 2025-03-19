@@ -65,7 +65,7 @@ estimate_monthly_excess<-function(outcome_variable,
   NN<-10000
   SS<-NULL
   for(ii in 1:NN){
-    sim_i<-forecast::simulate(mm,future=TRUE,nsim=forecast_window)
+    sim_i<-simulate(mm,future=TRUE,nsim=forecast_window)
     SS_i<-data.frame(pt=sum(sim_i))
     if(!is.null(forecast_periods)){
       for(pp in unique(forecast_periods)){

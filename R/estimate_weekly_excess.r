@@ -73,8 +73,8 @@ estimate_weekly_excess<-function(
   NN<-10000
   SS<-NULL
   for(ii in 1:NN){
-    sim_i<-forecast::simulate(mm,future=TRUE,nsim=forecast_window,
-                              xreg=fourier(tt,K=k.best,h=forecast_window))
+    sim_i<-simulate(mm,future=TRUE,nsim=forecast_window,
+                    xreg=fourier(tt,K=k.best,h=forecast_window))
     SS_i<-data.frame(pt=sum(sim_i))
     if(!is.null(forecast_periods)){
       for(pp in unique(forecast_periods)){
