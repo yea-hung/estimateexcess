@@ -1,6 +1,6 @@
 Package: estimateexcess
 Title: estimateexcess
-Version: 2025.03.19
+Version: 2025.03.20
 Authors@R: 
     person(given = 'Yea-Hung', family = 'Chen', 
        email = 'yea-hung.chen@ucsf.edu', role = c('aut','cre'))
@@ -8,7 +8,7 @@ Description: Estimates excess mortality using seasonal ARIMA models.
 License: MIT
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Imports: 
     forecast,
     ggplot2,
