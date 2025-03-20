@@ -90,30 +90,39 @@ estimate_weekly_excess<-function(
     expected=mean(SS$pt),
     expected_alternate=sum(WW$expected),
     expected_lower=as.numeric(quantile(SS$pt,c(0.025))),
-    expected_upper=as.numeric(quantile(SS$pt,c(0.975))),
-    excess=sum(WW$observed)-mean(SS$pt),
-    excess_alternate=sum(WW$observed-WW$expected),
-    excess_lower=sum(WW$observed)-as.numeric(quantile(SS$pt,0.975)),
-    excess_upper=sum(WW$observed)-as.numeric(quantile(SS$pt,0.025))
+    expected_upper=as.numeric(quantile(SS$pt,c(0.975)))
   )
+  RR$excess<-RR$observed-RR$expected
+  RR$excess_alternate<-RR$observed-RR$expected_alternate
+  RR$excess_lower<-RR$observed-RR$expected_upper
+  RR$excess_upper<-RR$observed-RR$expected_lower
+
+  # define period-specific results
   if(!is.null(forecast_periods)){
     for(period in unique(forecast_periods)){
-      WW_i<-which(forecast_periods==period)
-      SS_i<-paste('p',period,sep='')
-      ss<-period
-      RR[,paste('observed',ss,sep='_')]<-sum(WW$observed[WW_i])
-      RR[,paste('expected',ss,sep='_')]<-mean(SS[,SS_i])
-      RR[,paste('expected_alternate',ss,sep='_')]<-sum(WW$expected[WW_i])
-      RR[,paste('expected_lower',ss,sep='_')]<-quantile(SS[,SS_i],c(0.025))
-      RR[,paste('expected_upper',ss,sep='_')]<-quantile(SS[,SS_i],c(0.975))
-      RR[,paste('excess',ss,sep='_')]<-sum(WW$observed[WW_i])-mean(SS[,SS_i])
-      RR[,paste('excess_alternate',ss,sep='_')]<-sum(
-        WW$observed[WW_i]-WW$expected[WW_i]
-      )
-      RR[,paste('excess_lower',ss,sep='_')]<-sum(WW$observed[WW_i])-
-        quantile(SS[,SS_i],0.975)
-      RR[,paste('excess_upper',ss,sep='_')]<-sum(WW$observed[WW_i])-
-        quantile(SS[,SS_i],0.025)
+      # define indices
+      WW_p<-which(forecast_periods==period)
+      SS_p<-paste('p',period,sep='')
+      # define values
+      observed<-sum(WW$observed[WW_p])
+      expected<-mean(SS[,SS_p])
+      expected_alternate<-sum(WW$expected[WW_p])
+      expected_lower<-quantile(SS[,SS_p],c(0.025))
+      expected_upper<-quantile(SS[,SS_p],c(0.975))
+      excess<-observed-expected
+      excess_alternate<-observed-expected_alternate
+      excess_lower<-observed-expected_upper
+      excess_upper<-observed-expected_lower
+      # add values to data frame
+      RR[,paste('observed',period,sep='_')]<-observed
+      RR[,paste('expected',period,sep='_')]<-expected
+      RR[,paste('expected_alternate',period,sep='_')]<-expected_alternate
+      RR[,paste('expected_lower',period,sep='_')]<-expected_lower
+      RR[,paste('expected_upper',period,sep='_')]<-expected_upper
+      RR[,paste('excess',period,sep='_')]<-excess
+      RR[,paste('excess_alternate',period,sep='_')]<-excess_alternate
+      RR[,paste('excess_lower',period,sep='_')]<-excess_lower
+      RR[,paste('excess_upper',period,sep='_')]<-excess_upper
     }
   }
 

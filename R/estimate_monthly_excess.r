@@ -74,37 +74,46 @@ estimate_monthly_excess<-function(outcome_variable,
     SS<-rbind(SS,SS_i)
   }
 
-  # store results
+  # define overall results
   RR<-data.frame(
     group=outcome_variable,
     observed=sum(MM$observed),
     expected=mean(SS$pt),
     expected_alternate=sum(MM$expected),
-    expected_lower=as.numeric(quantile(SS$pt,0.025)),
-    expected_upper=as.numeric(quantile(SS$pt,0.975)),
-    excess=sum(MM$observed)-mean(SS$pt),
-    excess_alternate=sum(MM$observed-MM$expected),
-    excess_lower=sum(MM$observed)-as.numeric(quantile(SS$pt,0.975)),
-    excess_upper=sum(MM$observed)-as.numeric(quantile(SS$pt,0.025))
+    expected_lower=as.numeric(quantile(SS$pt,c(0.025))),
+    expected_upper=as.numeric(quantile(SS$pt,c(0.975)))
   )
+  RR$excess<-RR$observed-RR$expected
+  RR$excess_alternate<-RR$observed-RR$expected_alternate
+  RR$excess_lower<-RR$observed-RR$expected_upper
+  RR$excess_upper<-RR$observed-RR$expected_lower
+
+  # define period-specific results
   if(!is.null(forecast_periods)){
     for(period in unique(forecast_periods)){
-      MM_i<-which(forecast_periods==period)
-      SS_i<-paste('p',period,sep='')
-      ss<-period
-      RR[,paste('observed',ss,sep='_')]<-sum(MM$observed[MM_i])
-      RR[,paste('expected',ss,sep='_')]<-mean(SS[,SS_i])
-      RR[,paste('expected_alternate',ss,sep='_')]<-sum(MM$expected[MM_i])
-      RR[,paste('expected_lower',ss,sep='_')]<-quantile(SS[,SS_i],0.025)
-      RR[,paste('expected_upper',ss,sep='_')]<-quantile(SS[,SS_i],0.975)
-      RR[,paste('excess',ss,sep='_')]<-sum(MM$observed[MM_i])-mean(SS[,SS_i])
-      RR[,paste('excess_alternate',ss,sep='_')]<-sum(
-        MM$observed[MM_i]-MM$expected[MM_i]
-      )
-      RR[,paste('excess_lower',ss,sep='_')]<-sum(MM$observed[MM_i])-
-        quantile(SS[,SS_i],0.975)
-      RR[,paste('excess_upper',ss,sep='_')]<-sum(MM$observed[MM_i])-
-        quantile(SS[,SS_i],0.025)
+      # define indices
+      MM_p<-which(forecast_periods==period)
+      SS_p<-paste('p',period,sep='')
+      # define values
+      observed<-sum(MM$observed[MM_p])
+      expected<-mean(SS[,SS_p])
+      expected_alternate<-sum(MM$expected[MM_p])
+      expected_lower<-quantile(SS[,SS_p],0.025)
+      expected_upper<-quantile(SS[,SS_p],0.975)
+      excess<-observed-expected
+      excess_alternate<-observed-expected_alternate
+      excess_lower<-observed-expected_upper
+      excess_upper<-observed-expected_lower
+      # add values to data frame
+      RR[,paste('observed',period,sep='_')]<-observed
+      RR[,paste('expected',period,sep='_')]<-expected
+      RR[,paste('expected_alternate',period,sep='_')]<-expected_alternate
+      RR[,paste('expected_lower',period,sep='_')]<-expected_lower
+      RR[,paste('expected_upper',period,sep='_')]<-expected_upper
+      RR[,paste('excess',period,sep='_')]<-excess
+      RR[,paste('excess_alternate',period,sep='_')]<-excess_alternate
+      RR[,paste('excess_lower',period,sep='_')]<-excess_lower
+      RR[,paste('excess_upper',period,sep='_')]<-excess_upper
     }
   }
 
