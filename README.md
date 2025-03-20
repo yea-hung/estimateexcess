@@ -21,7 +21,7 @@ devtools::install_github('yea-hung/estimateexcess')
 Load the package:
 
 ```r
-library('estimateexcess')
+library(estimateexcess)
 ```
 
 Import your data:
