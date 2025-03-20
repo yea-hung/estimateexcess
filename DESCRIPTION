@@ -1,6 +1,6 @@
 Package: estimateexcess
 Title: estimateexcess
-Version: 2025.03.20
+Version: 2025.03.20.1
 Authors@R: 
     person(given = 'Yea-Hung', family = 'Chen', 
        email = 'yea-hung.chen@ucsf.edu', role = c('aut','cre'))
