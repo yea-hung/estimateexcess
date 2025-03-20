@@ -1,4 +1,3 @@
-# define function
 #' Estimate excess mortality using monthly data
 #'
 #' @param outcome_variable The name of the outcome variable, in quotes.
