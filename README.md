@@ -10,7 +10,7 @@ Install *devtools* if you don't already have it:
 install.packages('devtools')
 ```
 
-Install the *EstimateExcessMortality* package:
+Install the *estimateexcess* package:
 
 ```r
 devtools::install_github('yea-hung/estimateexcess')
