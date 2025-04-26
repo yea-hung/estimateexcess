@@ -91,13 +91,13 @@ estimate_weekly_excess<-function(
     expected_mean=mean(SS$pt),
     expected_lower=as.numeric(quantile(SS$pt,c(0.025))),
     expected_upper=as.numeric(quantile(SS$pt,c(0.975))),
-    expected_se=sd(SS$pt)*(NN-1)/NN
+    expected_se=sd(SS$pt)*sqrt(NN-1)/sqrt(NN)
   )
   RR$excess<-RR$observed-RR$expected
   RR$excess_mean<-RR$observed-RR$expected_mean
   RR$excess_lower<-RR$observed-RR$expected_upper
   RR$excess_upper<-RR$observed-RR$expected_lower
-  RR$excess_se<-sd(RR$observed-SS$pt)*(NN-1)/NN
+  RR$excess_se<-sd(RR$observed-SS$pt)*sqrt(NN-1)/sqrt(NN)
 
   # define period-specific results
   if(!is.null(forecast_periods)){
