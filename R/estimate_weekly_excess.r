@@ -37,7 +37,7 @@ estimate_weekly_excess<-function(
   # fit model
   mm<-list(aicc=Inf)
   for(i in 1:26){ # should not exceed 52/2
-    mm_i<-forecast::auto.arima(tt,xreg=fourier(tt,K=i))
+    mm_i<-forecast::auto.arima(tt,xreg=forecast::fourier(tt,K=i))
     if(mm_i$aicc<mm$aicc){
       mm<-mm_i
       k_best<-i
@@ -45,7 +45,7 @@ estimate_weekly_excess<-function(
   }
 
   # obtain forecasts
-  ff<-forecast::forecast(mm,xreg=fourier(tt,K=k_best,h=forecast_window))
+  ff<-forecast::forecast(mm,xreg=forecast::fourier(tt,K=k_best,h=forecast_window))
 
   # extract observed values
   rr<-data$week[data$week>=forecast_start]
@@ -73,7 +73,7 @@ estimate_weekly_excess<-function(
   SS<-NULL
   for(ii in 1:NN){
     sim_i<-simulate(mm,future=TRUE,nsim=forecast_window,
-                    xreg=fourier(tt,K=k_best,h=forecast_window))
+                    xreg=forecast::fourier(tt,K=k_best,h=forecast_window))
     SS_i<-data.frame(pt=sum(sim_i))
     if(!is.null(forecast_periods)){
       for(pp in unique(forecast_periods)){
