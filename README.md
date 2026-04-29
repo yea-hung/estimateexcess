@@ -4,16 +4,10 @@ An R package for estimating excess mortality, using seasonal ARIMA models.
 
 ## Installation
 
-Install *devtools* if you don't already have it:
+To install the package, use `install_github()` from the *remotes* package or `pkg_install()` from the *pak* package:
 
 ```r
-install.packages('devtools')
-```
-
-Install the *estimateexcess* package:
-
-```r
-devtools::install_github('yea-hung/estimateexcess')
+pak::pkg_install('yea-hung/yea-hung/estimateexcess')
 ```
 
 ## Use
