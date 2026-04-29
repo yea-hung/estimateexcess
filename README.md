@@ -1,8 +1,8 @@
-# Summary
+## Summary
 
 An R package for estimating excess mortality, using seasonal ARIMA models. 
 
-# Installation
+## Installation
 
 Install *devtools* if you don't already have it:
 
@@ -16,7 +16,7 @@ Install the *estimateexcess* package:
 devtools::install_github('yea-hung/estimateexcess')
 ```
 
-# Use
+## Use
 
 Load the package:
 
@@ -53,6 +53,6 @@ results<-rbind(r1$results,r2$results,r3$results)
 
 This stacks all of the `results` from each analysis into a single data frame, named `results`.
 
-# Methodological details
+## Methodological details
 
 The weekly models use an approach described [here](https://otexts.com/fpp2/complexseasonality.html) and [here](https://robjhyndman.com/hyndsight/forecasting-weekly-data/).
