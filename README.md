@@ -29,7 +29,7 @@ To estimate excess mortality for the variable `Inland Empire`:
 ```r
 rr<-estimate_weekly_excess('Inland Empire',weekly_data)
 ```
-
+ 
 To view the plot:
 
 ```r
